@@ -11,7 +11,18 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http', funct
   }
 
   function getUserStatus() {
-    return user;
+    return $http
+      .get('/user/status')
+      .success(function (data) {
+        if (data.status) {
+          user = true;
+        } else {
+          user = false;
+        }
+      })
+      .error(function (data) {
+        user = false;
+      });
   }
 
   function login(username, password) {
@@ -62,28 +73,28 @@ angular.module('myApp').factory('AuthService', ['$q', '$timeout', '$http', funct
     //return promise object
     return deferred.promise;
   }
-  
-  function register(username, password){
+
+  function register(username, password) {
     //create a new instance of deferred 
     var deferred = $q.defer();
-    
+
     //send a post request to the server
     $http
       .post('/user/register', {
-      username: username,
-      password: password
-    })
-      .success(function(data, status){
-      if(status === 200 && data.status){
-        deferred.resolve();
-      } else {
+        username: username,
+        password: password
+      })
+      .success(function (data, status) {
+        if (status === 200 && data.status) {
+          deferred.resolve();
+        } else {
+          deferred.reject();
+        }
+      })
+      .error(function (data) {
         deferred.reject();
-      }
-    })
-      .error(function(data){
-      deferred.reject();
-    });
-    
+      });
+
     //return promise object
     return deferred.promise;
   }
