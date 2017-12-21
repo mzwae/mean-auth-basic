@@ -56,6 +56,7 @@ router.get('/logout', function (req, res) {
 
 router.get('/status', function (req, res) {
   //if the user is not logged in
+  
   if (!req.isAuthenticated()) {
     return res
       .status(200)
