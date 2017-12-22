@@ -50,12 +50,11 @@ myApp.config(function ($routeProvider) {
 
 myApp.run(function ($rootScope, $location, $route, AuthService) {
   $rootScope.$on('$routeChangeStart', function (event, next, current) {
-    console.log('current:', current);
-    console.log('next:', next.$$route.access);
+
     AuthService
       .getUserStatus()
       .then(function () {
-        if (next.$$route.access.restricted === true && AuthService.isLoggedIn() === false) {
+        if (next.access.restricted && !AuthService.isLoggedIn()) {
           $location.path('/login');
           $route.reload();
         }
